@@ -15,7 +15,11 @@ struct MainView: View {
     var body: some View {
         NavigationView {
             List(store.list) { blog in
-                BlogCellView(blog: blog)
+                NavigationLink {
+                    DetailBlogView(blog: blog)
+                } label: {
+                    BlogCellView(blog: blog)
+                }
             }
             .listStyle(.plain)
             .navigationTitle("Blogs")
