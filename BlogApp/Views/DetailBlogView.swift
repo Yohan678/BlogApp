@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct DetailBlogView: View {
+    
     @ObservedObject var blog: Blog
     @EnvironmentObject var store: BlogStore
+    
+    @State private var showEdit: Bool = false
     
     var body: some View {
         NavigationView {
@@ -26,22 +29,27 @@ struct DetailBlogView: View {
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button {
-                            
+                            showEdit = true
                         } label: {
                             Image(systemName: "square.and.pencil")
                         }
                     }
+                    
                     ToolbarItemGroup(placement: .bottomBar) {
                         Button {
-                            
+                            store.delete(blog: blog)
                         } label: {
                             Image(systemName: "trash")
                         }
+                        .foregroundColor(.red)
                         
                         Text(blog.insertDate, style: .date)
                             .foregroundColor(.secondary)
                             .font(.footnote)
                     }
+                }
+                .sheet(isPresented: $showEdit) {
+                    ComposerView(blog: blog)
                 }
             }
         }

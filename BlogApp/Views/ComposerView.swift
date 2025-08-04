@@ -12,6 +12,8 @@ struct ComposerView: View {
     
     @Environment(\.dismiss) var dismiss
     
+    var blog: Blog? = nil
+    
     @State private var title: String = ""
     @State private var content: String = ""
     
@@ -23,14 +25,24 @@ struct ComposerView: View {
                     .padding()
                     .border(Color.black)
                     .frame(maxWidth: .infinity, maxHeight: 50)
+                    .onAppear {
+                        if let blog = blog {
+                            title = blog.title
+                        }
+                    }
                 
                 TextField("I had a this day...", text: $content)
                     .padding()
+                    .onAppear {
+                        if let blog = blog {
+                            content = blog.content
+                        }
+                    }
                 Spacer()
                 
                 
             }
-            .navigationTitle("New Post")
+            .navigationTitle(blog != nil ? "Edit Post" : "New Post")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItemGroup(placement: .topBarLeading) {
@@ -44,7 +56,11 @@ struct ComposerView: View {
                 
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Button {
-                        store.insert(title: title, content: content)
+                        if let blog = blog {
+                            store.update(blog: blog, title: title, content: content)
+                        } else {
+                            store.insert(title: title, content: content)
+                        }
                         dismiss()
                     } label: {
                         Text("Save")

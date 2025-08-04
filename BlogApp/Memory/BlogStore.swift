@@ -22,10 +22,11 @@ class BlogStore: ObservableObject {
         list.insert(Blog(title: title, content: content), at: 0)
     }
     
-    func update(blog: Blog?, content: String) {
+    func update(blog: Blog?, title: String, content: String) {
         guard let blog = blog else {
             return
         }
+        blog.title = title
         blog.content = content
     }
     
